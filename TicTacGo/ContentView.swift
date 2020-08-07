@@ -9,9 +9,26 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        Text("Hello, World!")
+  @State private var currentTime: Date = Date()
+  let timer = ViewModel()
+
+  var body: some View {
+    VStack {
+      Button(action: self.start,
+             label: { Text("OK") }
+      )
+//      .onReceive(timer.source){ newCurrentTime in
+//        print(newCurrentTime)
+//      }
     }
+    .onReceive(timer.currentTimePublisher){ newCurrentTime in
+      print(newCurrentTime)
+    }
+  }
+  
+  func start() {
+    timer.startTimer()
+  }
 }
 
 struct ContentView_Previews: PreviewProvider {

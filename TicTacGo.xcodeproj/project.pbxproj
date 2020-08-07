@@ -16,6 +16,7 @@
 		DBABFED024DCC03100669C6F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DBABFECE24DCC03100669C6F /* LaunchScreen.storyboard */; };
 		DBABFEDB24DCC03100669C6F /* TicTacGoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEDA24DCC03100669C6F /* TicTacGoTests.swift */; };
 		DBABFEE624DCC03100669C6F /* TicTacGoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEE524DCC03100669C6F /* TicTacGoUITests.swift */; };
+		DBABFEF424DCCAAA00669C6F /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEF324DCCAAA00669C6F /* ViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		DBABFEE124DCC03100669C6F /* TicTacGoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TicTacGoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBABFEE524DCC03100669C6F /* TicTacGoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacGoUITests.swift; sourceTree = "<group>"; };
 		DBABFEE724DCC03100669C6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DBABFEF324DCCAAA00669C6F /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 				DBABFEC024DCC02F00669C6F /* AppDelegate.swift */,
 				DBABFEC224DCC02F00669C6F /* SceneDelegate.swift */,
 				DBABFEC724DCC02F00669C6F /* ContentView.swift */,
+				DBABFEF324DCCAAA00669C6F /* ViewModel.swift */,
 				DBABFEC924DCC03100669C6F /* Assets.xcassets */,
 				DBABFECE24DCC03100669C6F /* LaunchScreen.storyboard */,
 				DBABFED124DCC03100669C6F /* Info.plist */,
@@ -270,6 +273,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DBABFEF424DCCAAA00669C6F /* ViewModel.swift in Sources */,
 				DBABFEC124DCC02F00669C6F /* AppDelegate.swift in Sources */,
 				DBABFEC324DCC02F00669C6F /* SceneDelegate.swift in Sources */,
 				DBABFEC824DCC02F00669C6F /* ContentView.swift in Sources */,
