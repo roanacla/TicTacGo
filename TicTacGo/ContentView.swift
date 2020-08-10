@@ -62,16 +62,12 @@ struct ContentView: View {
         )
         .padding()
       }
-      .onReceive(timer.currentTimePublisher){ newCurrentTime in
-        print(newCurrentTime)
-      }
     }
   }
   
   func start() {
     let lapTime = LapTime(exerciseMinutes: exerMinutes, exerciseSeconds: exerSeconds, restMinutes: restMinutes, restSeconds: restSeconds)
-    timer.lapTime = lapTime
-    timer.startTimer()
+    timer.startTimer(lapTime: lapTime)
   }
   
   func stop() {

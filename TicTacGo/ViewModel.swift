@@ -28,18 +28,18 @@ public struct LapTime: CustomStringConvertible {
 }
 
 public class ViewModel {
-  let currentTimePublisher = Timer.TimerPublisher(interval: 1.0, runLoop: .main, mode: .default)
+  var currentTimePublisher: Publishers.Autoconnect<Timer.TimerPublisher>?
   var cancellable: AnyCancellable?
   var lapTime: LapTime?
   
-  func startTimer() {
-    guard let lapTime = lapTime else { return }
+  func startTimer(lapTime: LapTime) {
     print(lapTime.description)
-    self.cancellable = currentTimePublisher.connect() as? AnyCancellable
+    self.currentTimePublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    self.cancellable = currentTimePublisher?.sink(receiveValue: {value in print(value)})
   }
   
   func stopTimer() {
-    self.currentTimePublisher.connect().cancel()
+    self.currentTimePublisher?.upstream.connect().cancel()
   }
   
   deinit {
