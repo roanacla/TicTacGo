@@ -63,7 +63,9 @@ struct ContentView: View {
   }
   
   func start() {
-    timer.startTimer()
+    timer.startTimer(completion: {
+      self.isStartButtonDisabled = false
+    })
     isStartButtonDisabled = true
   }
   

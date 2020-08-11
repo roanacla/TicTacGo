@@ -37,14 +37,19 @@ public class ViewModel : ObservableObject {
   var cancellable: AnyCancellable?
   @Published var lapTime = LapTime()
   
-  func startTimer() {
-//    self.lapTime = runTime
+  func startTimer(completion: (()->())?) {
     let allowToStart = (lapTime.exerciseMinutes+lapTime.exerciseSeconds+lapTime.restMinutes+lapTime.restSeconds) > 0 ? true : false
     if allowToStart {
+      var totalTime = lapTime.exerciseMinutes*60+lapTime.exerciseSeconds+lapTime.restMinutes*60+lapTime.restSeconds
       self.currentTimePublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-      self.cancellable = currentTimePublisher?.sink(receiveValue: { _ in
+      self.cancellable = currentTimePublisher?.sink { _ in
         self.countDownByOne()
-      })
+        totalTime -= 1
+        if totalTime == 0 {
+          completion?()
+          //Play sound here
+        }
+      }
     }
   }
   
