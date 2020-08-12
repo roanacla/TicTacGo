@@ -11,7 +11,7 @@ import SwiftUI
 struct ContentView: View {
   @ObservedObject var timer = ViewModel()
   @State var isStartButtonDisabled = false
-  @State var loops: Double = 1
+  @State var isTimerRunning = false
 
   var body: some View {
     VStack {
@@ -51,11 +51,11 @@ struct ContentView: View {
           .frame(maxWidth: geometry.size.width / 2)
         }
       }
-      Text("Loops: \(Int(self.loops))")
+      Text("Loops: \(Int(self.timer.loops))")
         .padding()
       HStack {
         Text("1")
-        Slider(value: self.$loops, in: 1...10, step: 1.0)
+        Slider(value: self.$timer.loops, in: 1...10, step: 1.0)
         Text("10")
       }
       .padding(.leading)
@@ -65,8 +65,8 @@ struct ContentView: View {
                label: { Text("STOP")}
         )
           .padding()
-        Button(action: self.start,
-               label: { Text("START") }
+        Button(action: isTimerRunning ? self.pause : self.start,
+               label: { Text(isTimerRunning ? "STOP" : "START") }
         )
           .disabled(self.isStartButtonDisabled)
           .padding()
@@ -75,15 +75,22 @@ struct ContentView: View {
   }
   
   func start() {
+    isTimerRunning = true
     timer.startTimer(completion: {
       self.isStartButtonDisabled = false
+      self.isTimerRunning = false
     })
     isStartButtonDisabled = true
+  }
+  
+  func pause() {
+    print("Pause!")
   }
   
   func stop() {
     timer.stopTimer()
     isStartButtonDisabled = false
+    isTimerRunning = false
   }
 }
 

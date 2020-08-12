@@ -36,17 +36,25 @@ public class ViewModel : ObservableObject {
   var currentTimePublisher: Publishers.Autoconnect<Timer.TimerPublisher>?
   var cancellable: AnyCancellable?
   @Published var lapTime = LapTime()
+  @Published var loops: Double = 1
+  var memoryLapTime = LapTime()
+  var memoryLoops: Double = 1
   
   func startTimer(completion: (()->())?) {
     let allowToStart = (lapTime.exerciseMinutes+lapTime.exerciseSeconds+lapTime.restMinutes+lapTime.restSeconds) > 0 ? true : false
+    memoryLapTime = lapTime
+    memoryLoops = loops
     if allowToStart {
-      var totalTime = lapTime.exerciseMinutes*60+lapTime.exerciseSeconds+lapTime.restMinutes*60+lapTime.restSeconds
+      var totalTime = (lapTime.exerciseMinutes*60+lapTime.exerciseSeconds+lapTime.restMinutes*60+lapTime.restSeconds)
       self.currentTimePublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
       self.cancellable = currentTimePublisher?.sink { _ in
         self.countDownByOne()
         totalTime -= 1
-        if totalTime == 0 {
+        if self.loops == 0 {
+          self.stopTimer()
           completion?()
+          self.lapTime = self.memoryLapTime
+          self.loops = self.memoryLoops
           //Play sound here
         }
       }
@@ -70,9 +78,9 @@ public class ViewModel : ObservableObject {
       self.lapTime.restMinutes -= 1
       self.lapTime.restSeconds = 59
     } else {
-      print("🔴BRRRR BRRR BRRRR")
-      print(self.lapTime.description)
-      self.stopTimer()
+      print("🔴 BRRRR BRRR BRRRR Finish loop")
+      self.loops -= 1
+      self.lapTime = memoryLapTime
     }
   }
   
