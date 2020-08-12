@@ -8,6 +8,20 @@
 
 import SwiftUI
 
+struct TimePicker: View {
+  @Binding var timeUnits: Int
+  var unitsRange: Range<Int>
+  var unitsRangeLabel: String
+  
+  var body: some View {
+    Picker(selection: self.$timeUnits, label: Text("")) {
+      ForEach(unitsRange) {
+        Text("\($0) " + self.unitsRangeLabel)
+      }
+    }
+  }
+}
+
 struct ContentView: View {
   @ObservedObject var timer = ViewModel()
   @State var isStartButtonDisabled = false
@@ -19,36 +33,28 @@ struct ContentView: View {
         .padding()
       GeometryReader { geometry in
         HStack{
-          Picker(selection: self.$timer.lapTime.exerciseMinutes, label: Text("")) {
-            ForEach(0..<6) {
-              Text("\($0) min").tag($0)
-            }
-          }
-          .frame(maxWidth: geometry.size.width / 2)
-          Picker(selection: self.$timer.lapTime.exerciseSeconds, label: Text("")) {
-            ForEach(0..<60) {
-              Text("\($0) sec").tag($0)
-            }
-          }
-          .frame(maxWidth: geometry.size.width / 2)
+          TimePicker(timeUnits: self.$timer.lapTime.exerciseMinutes,
+                     unitsRange: 0..<6,
+                     unitsRangeLabel: "min")
+            .frame(maxWidth: geometry.size.width / 2)
+          TimePicker(timeUnits: self.$timer.lapTime.exerciseSeconds,
+                     unitsRange: 0..<60,
+                     unitsRangeLabel: "sec")
+            .frame(maxWidth: geometry.size.width / 2)
         }
       }
       Text("Rest time:")
         .padding()
       GeometryReader { geometry in
         HStack{
-          Picker(selection: self.$timer.lapTime.restMinutes, label: Text("")) {
-            ForEach(0..<6) {
-              Text("\($0) min").tag($0)
-            }
-          }
-          .frame(maxWidth: geometry.size.width / 2)
-          Picker(selection: self.$timer.lapTime.restSeconds, label: Text("")) {
-            ForEach(0..<60) {
-              Text("\($0) sec").tag($0)
-            }
-          }
-          .frame(maxWidth: geometry.size.width / 2)
+          TimePicker(timeUnits: self.$timer.lapTime.restMinutes,
+                     unitsRange: 0..<6,
+                     unitsRangeLabel: "min")
+            .frame(maxWidth: geometry.size.width / 2)
+          TimePicker(timeUnits: self.$timer.lapTime.restSeconds,
+                     unitsRange: 0..<60,
+                     unitsRangeLabel: "sec")
+            .frame(maxWidth: geometry.size.width / 2)
         }
       }
       Text("Loops: \(Int(self.timer.loops))")

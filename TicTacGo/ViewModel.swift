@@ -45,11 +45,9 @@ public class ViewModel : ObservableObject {
     memoryLapTime = lapTime
     memoryLoops = loops
     if allowToStart {
-      var totalTime = (lapTime.exerciseMinutes*60+lapTime.exerciseSeconds+lapTime.restMinutes*60+lapTime.restSeconds)
       self.currentTimePublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
       self.cancellable = currentTimePublisher?.sink { _ in
         self.countDownByOne()
-        totalTime -= 1
         if self.loops == 0 {
           self.stopTimer()
           completion?()
