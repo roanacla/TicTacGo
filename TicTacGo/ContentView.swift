@@ -24,7 +24,6 @@ struct TimePicker: View {
 
 struct ContentView: View {
   @ObservedObject var timer = ViewModel()
-  @State var isStartButtonDisabled = false
   @State var isTimerRunning = false
 
   var body: some View {
@@ -61,41 +60,28 @@ struct ContentView: View {
         .padding()
       HStack {
         Text("1")
-        Slider(value: self.$timer.loops, in: 1...10, step: 1.0)
-        Text("10")
+        Slider(value: self.$timer.loops, in: 1...60, step: 1.0)
+        Text("60")
       }
       .padding(.leading)
       .padding(.trailing)
-      HStack {
-        Button(action: self.stop,
-               label: { Text("STOP")}
-        )
-          .padding()
-        Button(action: isTimerRunning ? self.pause : self.start,
-               label: { Text(isTimerRunning ? "STOP" : "START") }
-        )
-          .disabled(self.isStartButtonDisabled)
-          .padding()
-      }
+      Button(action: isTimerRunning ? self.stop : self.start,
+             label: { Text(isTimerRunning ? "Cancel" : "Start") }
+      )
+        .disabled(self.timer.lapTime.isZero)
+        .padding()
     }
   }
   
   func start() {
     isTimerRunning = true
     timer.startTimer(completion: {
-      self.isStartButtonDisabled = false
       self.isTimerRunning = false
     })
-    isStartButtonDisabled = true
-  }
-  
-  func pause() {
-    print("Pause!")
   }
   
   func stop() {
     timer.stopTimer()
-    isStartButtonDisabled = false
     isTimerRunning = false
   }
 }

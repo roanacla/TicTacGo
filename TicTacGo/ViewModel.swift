@@ -15,6 +15,14 @@ public struct LapTime: CustomStringConvertible {
   var restMinutes = 0
   var restSeconds = 0
   
+  var totalSeconds: Int {
+    return exerciseMinutes*60 + exerciseSeconds + restMinutes*60 + restSeconds
+  }
+  
+  var isZero: Bool {
+    return (exerciseMinutes + exerciseSeconds + restMinutes + restSeconds) == 0 ? true : false
+  }
+  
   mutating func reset() {
     exerciseMinutes = 0
     exerciseSeconds = 0
@@ -33,12 +41,13 @@ public struct LapTime: CustomStringConvertible {
 }
 
 public class ViewModel : ObservableObject {
-  var currentTimePublisher: Publishers.Autoconnect<Timer.TimerPublisher>?
-  var cancellable: AnyCancellable?
+  private var currentTimePublisher: Publishers.Autoconnect<Timer.TimerPublisher>?
+  private var cancellable: AnyCancellable?
+  private var memoryLapTime = LapTime()
+  private var memoryLoops: Double = 1
+  
   @Published var lapTime = LapTime()
   @Published var loops: Double = 1
-  var memoryLapTime = LapTime()
-  var memoryLoops: Double = 1
   
   func startTimer(completion: (()->())?) {
     let allowToStart = (lapTime.exerciseMinutes+lapTime.exerciseSeconds+lapTime.restMinutes+lapTime.restSeconds) > 0 ? true : false
@@ -51,9 +60,6 @@ public class ViewModel : ObservableObject {
         if self.loops == 0 {
           self.stopTimer()
           completion?()
-          self.lapTime = self.memoryLapTime
-          self.loops = self.memoryLoops
-          //Play sound here
         }
       }
     }
@@ -61,7 +67,12 @@ public class ViewModel : ObservableObject {
   
   func stopTimer() {
     self.currentTimePublisher?.upstream.connect().cancel()
-    self.lapTime.reset()
+    self.cancelTimer()
+  }
+  
+  private func cancelTimer() {
+    self.lapTime = self.memoryLapTime
+    self.loops = self.memoryLoops
   }
   
   func countDownByOne() {
