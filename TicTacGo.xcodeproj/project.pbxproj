@@ -17,6 +17,7 @@
 		DBABFEDB24DCC03100669C6F /* TicTacGoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEDA24DCC03100669C6F /* TicTacGoTests.swift */; };
 		DBABFEE624DCC03100669C6F /* TicTacGoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEE524DCC03100669C6F /* TicTacGoUITests.swift */; };
 		DBABFEF424DCCAAA00669C6F /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEF324DCCAAA00669C6F /* ViewModel.swift */; };
+		DBD10FD824E4D5F300BCEFCE /* out.caf in Resources */ = {isa = PBXBuildFile; fileRef = DBD10FD724E4D5F300BCEFCE /* out.caf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		DBABFEE524DCC03100669C6F /* TicTacGoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacGoUITests.swift; sourceTree = "<group>"; };
 		DBABFEE724DCC03100669C6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DBABFEF324DCCAAA00669C6F /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		DBD10FD724E4D5F300BCEFCE /* out.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = out.caf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +105,7 @@
 		DBABFEBF24DCC02F00669C6F /* TicTacGo */ = {
 			isa = PBXGroup;
 			children = (
+				DBD10FD624E4D5E300BCEFCE /* Sound */,
 				DBABFEC024DCC02F00669C6F /* AppDelegate.swift */,
 				DBABFEC224DCC02F00669C6F /* SceneDelegate.swift */,
 				DBABFEC724DCC02F00669C6F /* ContentView.swift */,
@@ -140,6 +143,14 @@
 				DBABFEE724DCC03100669C6F /* Info.plist */,
 			);
 			path = TicTacGoUITests;
+			sourceTree = "<group>";
+		};
+		DBD10FD624E4D5E300BCEFCE /* Sound */ = {
+			isa = PBXGroup;
+			children = (
+				DBD10FD724E4D5F300BCEFCE /* out.caf */,
+			);
+			path = Sound;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -249,6 +260,7 @@
 				DBABFED024DCC03100669C6F /* LaunchScreen.storyboard in Resources */,
 				DBABFECD24DCC03100669C6F /* Preview Assets.xcassets in Resources */,
 				DBABFECA24DCC03100669C6F /* Assets.xcassets in Resources */,
+				DBD10FD824E4D5F300BCEFCE /* out.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

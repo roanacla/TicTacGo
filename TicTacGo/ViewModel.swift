@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import AudioToolbox
 
 public struct LapTime: CustomStringConvertible {
   var exerciseMinutes = 0
@@ -54,6 +55,7 @@ public class ViewModel : ObservableObject {
     memoryLapTime = lapTime
     memoryLoops = loops
     if allowToStart {
+      loadSoundEffect("out.caf")
       self.currentTimePublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
       self.cancellable = currentTimePublisher?.sink { _ in
         self.countDownByOne()
@@ -82,6 +84,9 @@ public class ViewModel : ObservableObject {
       self.lapTime.exerciseMinutes -= 1
       self.lapTime.exerciseSeconds = 59
     } else if self.lapTime.restSeconds != 0 {
+      if self.lapTime.restSeconds == 10 {
+        playSoundEffect()
+      }
       self.lapTime.restSeconds -= 1
     } else if self.lapTime.restMinutes > 0 {
       self.lapTime.restMinutes -= 1
@@ -91,6 +96,27 @@ public class ViewModel : ObservableObject {
       self.loops -= 1
       self.lapTime = memoryLapTime
     }
+  }
+  
+  var soundID: SystemSoundID = 0
+  
+  func loadSoundEffect(_ name: String) {
+    if let path = Bundle.main.path(forResource: name, ofType: nil) {
+      let fileURL = URL(fileURLWithPath: path, isDirectory: false)
+      let error = AudioServicesCreateSystemSoundID(fileURL as CFURL, &soundID)
+      if error != kAudioServicesNoError {
+        print("Error code \(error) loading sound: \(path)")
+      }
+    }
+  }
+  
+  func unloadSoundEffect() {
+    AudioServicesDisposeSystemSoundID(soundID)
+    soundID = 0
+  }
+  
+  func playSoundEffect() {
+    AudioServicesPlaySystemSound(soundID)
   }
   
   deinit {

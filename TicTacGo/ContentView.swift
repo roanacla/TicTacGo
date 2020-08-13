@@ -26,6 +26,7 @@ struct ContentView: View {
   @ObservedObject var timer = ViewModel()
   @State var isTimerRunning = false
 
+  //MARK: View Body
   var body: some View {
     VStack {
       Text("Exercise time:")
@@ -73,6 +74,7 @@ struct ContentView: View {
     }
   }
   
+  //MARK: - Functions
   func start() {
     isTimerRunning = true
     timer.startTimer(completion: {
