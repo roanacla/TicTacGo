@@ -17,6 +17,10 @@
 		DBABFEDB24DCC03100669C6F /* TicTacGoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEDA24DCC03100669C6F /* TicTacGoTests.swift */; };
 		DBABFEE624DCC03100669C6F /* TicTacGoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEE524DCC03100669C6F /* TicTacGoUITests.swift */; };
 		DBABFEF424DCCAAA00669C6F /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEF324DCCAAA00669C6F /* ViewModel.swift */; };
+		DBCBEE4B24E70F9F003E24F7 /* end.caf in Resources */ = {isa = PBXBuildFile; fileRef = DBCBEE4824E70F9F003E24F7 /* end.caf */; };
+		DBCBEE4C24E70F9F003E24F7 /* start.caf in Resources */ = {isa = PBXBuildFile; fileRef = DBCBEE4924E70F9F003E24F7 /* start.caf */; };
+		DBCBEE4D24E70F9F003E24F7 /* middle.caf in Resources */ = {isa = PBXBuildFile; fileRef = DBCBEE4A24E70F9F003E24F7 /* middle.caf */; };
+		DBCBEE4F24E735A3003E24F7 /* start_2.caf in Resources */ = {isa = PBXBuildFile; fileRef = DBCBEE4E24E735A3003E24F7 /* start_2.caf */; };
 		DBD10FD824E4D5F300BCEFCE /* out.caf in Resources */ = {isa = PBXBuildFile; fileRef = DBD10FD724E4D5F300BCEFCE /* out.caf */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +58,10 @@
 		DBABFEE524DCC03100669C6F /* TicTacGoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacGoUITests.swift; sourceTree = "<group>"; };
 		DBABFEE724DCC03100669C6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DBABFEF324DCCAAA00669C6F /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		DBCBEE4824E70F9F003E24F7 /* end.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = end.caf; sourceTree = "<group>"; };
+		DBCBEE4924E70F9F003E24F7 /* start.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = start.caf; sourceTree = "<group>"; };
+		DBCBEE4A24E70F9F003E24F7 /* middle.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = middle.caf; sourceTree = "<group>"; };
+		DBCBEE4E24E735A3003E24F7 /* start_2.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = start_2.caf; sourceTree = "<group>"; };
 		DBD10FD724E4D5F300BCEFCE /* out.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = out.caf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -149,6 +157,10 @@
 			isa = PBXGroup;
 			children = (
 				DBD10FD724E4D5F300BCEFCE /* out.caf */,
+				DBCBEE4824E70F9F003E24F7 /* end.caf */,
+				DBCBEE4A24E70F9F003E24F7 /* middle.caf */,
+				DBCBEE4924E70F9F003E24F7 /* start.caf */,
+				DBCBEE4E24E735A3003E24F7 /* start_2.caf */,
 			);
 			path = Sound;
 			sourceTree = "<group>";
@@ -258,6 +270,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBABFED024DCC03100669C6F /* LaunchScreen.storyboard in Resources */,
+				DBCBEE4C24E70F9F003E24F7 /* start.caf in Resources */,
+				DBCBEE4F24E735A3003E24F7 /* start_2.caf in Resources */,
+				DBCBEE4D24E70F9F003E24F7 /* middle.caf in Resources */,
+				DBCBEE4B24E70F9F003E24F7 /* end.caf in Resources */,
 				DBABFECD24DCC03100669C6F /* Preview Assets.xcassets in Resources */,
 				DBABFECA24DCC03100669C6F /* Assets.xcassets in Resources */,
 				DBD10FD824E4D5F300BCEFCE /* out.caf in Resources */,

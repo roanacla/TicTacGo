@@ -55,7 +55,6 @@ public class ViewModel : ObservableObject {
     memoryLapTime = lapTime
     memoryLoops = loops
     if allowToStart {
-      loadSoundEffect("out.caf")
       self.currentTimePublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
       self.cancellable = currentTimePublisher?.sink { _ in
         self.countDownByOne()
@@ -84,9 +83,6 @@ public class ViewModel : ObservableObject {
       self.lapTime.exerciseMinutes -= 1
       self.lapTime.exerciseSeconds = 59
     } else if self.lapTime.restSeconds != 0 {
-      if self.lapTime.restSeconds == 10 {
-        playSoundEffect()
-      }
       self.lapTime.restSeconds -= 1
     } else if self.lapTime.restMinutes > 0 {
       self.lapTime.restMinutes -= 1
@@ -98,25 +94,41 @@ public class ViewModel : ObservableObject {
     }
   }
   
-  var soundID: SystemSoundID = 0
+  var soundsData: [String: SystemSoundID]
   
-  func loadSoundEffect(_ name: String) {
-    if let path = Bundle.main.path(forResource: name, ofType: nil) {
-      let fileURL = URL(fileURLWithPath: path, isDirectory: false)
-      let error = AudioServicesCreateSystemSoundID(fileURL as CFURL, &soundID)
-      if error != kAudioServicesNoError {
-        print("Error code \(error) loading sound: \(path)")
+  init() {
+    let startSoundID: SystemSoundID = 0
+    let middleSoundID: SystemSoundID = 0
+    let endSoundID: SystemSoundID = 0
+    soundsData = ["start_2.caf": startSoundID,
+                "middle.caf": middleSoundID,
+                "end.caf": endSoundID]
+    self.loadSoundEffects()
+  }
+  
+  func loadSoundEffects() {
+    for soundID in soundsData {
+      if let path = Bundle.main.path(forResource: soundID.key, ofType: nil) {
+        let fileURL = URL(fileURLWithPath: path, isDirectory: false)
+        let error = AudioServicesCreateSystemSoundID(fileURL as CFURL, &soundsData[soundID.key]!)
+        if error != kAudioServicesNoError {
+          print("Error code \(error) loading sound: \(path)")
+        }
       }
     }
   }
   
-  func unloadSoundEffect() {
-    AudioServicesDisposeSystemSoundID(soundID)
-    soundID = 0
+  func unloadSoundEffect(soundName: String) {
+    if let soundID = soundsData[soundName] {
+      AudioServicesDisposeSystemSoundID(soundID)
+      soundsData[soundName] = 0
+    }
   }
   
-  func playSoundEffect() {
-    AudioServicesPlaySystemSound(soundID)
+  func playSoundEffect(soundName: String) {
+    if let soundID = soundsData[soundName] {
+      AudioServicesPlaySystemSound(soundID)
+    }
   }
   
   deinit {
