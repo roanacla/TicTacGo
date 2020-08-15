@@ -42,25 +42,45 @@ public struct LapTime: CustomStringConvertible {
 }
 
 public class ViewModel : ObservableObject {
+  //MARK: - Properties
   private var currentTimePublisher: Publishers.Autoconnect<Timer.TimerPublisher>?
   private var cancellable: AnyCancellable?
   private var memoryLapTime = LapTime()
   private var memoryLoops: Double = 1
+  private var soundsData: [String: SystemSoundID]
   
   @Published var lapTime = LapTime()
   @Published var loops: Double = 1
+  
+  //MARK: - Initializer
+  init() {
+    let startSoundID: SystemSoundID = 0
+    let middleSoundID: SystemSoundID = 0
+    let endSoundID: SystemSoundID = 0
+    soundsData = ["start.caf": startSoundID,
+                "middle.caf": middleSoundID,
+                "end.caf": endSoundID]
+    self.loadSoundEffects()
+  }
+  
+  //MARK: - Functions
   
   func startTimer(completion: (()->())?) {
     let allowToStart = (lapTime.exerciseMinutes+lapTime.exerciseSeconds+lapTime.restMinutes+lapTime.restSeconds) > 0 ? true : false
     memoryLapTime = lapTime
     memoryLoops = loops
+    var counter = 0
     if allowToStart {
       self.currentTimePublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+      self.playSoundEffect(soundName: "start.caf")
       self.cancellable = currentTimePublisher?.sink { _ in
-        self.countDownByOne()
-        if self.loops == 0 {
-          self.stopTimer()
-          completion?()
+        counter += 1
+        if counter >= 10 {
+          self.countDownByOne()
+          if self.loops == 0 {
+            self.stopTimer()
+            completion?()
+          }
         }
       }
     }
@@ -94,19 +114,8 @@ public class ViewModel : ObservableObject {
     }
   }
   
-  var soundsData: [String: SystemSoundID]
-  
-  init() {
-    let startSoundID: SystemSoundID = 0
-    let middleSoundID: SystemSoundID = 0
-    let endSoundID: SystemSoundID = 0
-    soundsData = ["start_2.caf": startSoundID,
-                "middle.caf": middleSoundID,
-                "end.caf": endSoundID]
-    self.loadSoundEffects()
-  }
-  
-  func loadSoundEffects() {
+  //MARK: - Sound Functions
+  private func loadSoundEffects() {
     for soundID in soundsData {
       if let path = Bundle.main.path(forResource: soundID.key, ofType: nil) {
         let fileURL = URL(fileURLWithPath: path, isDirectory: false)
@@ -118,14 +127,14 @@ public class ViewModel : ObservableObject {
     }
   }
   
-  func unloadSoundEffect(soundName: String) {
+  private func unloadSoundEffect(soundName: String) {
     if let soundID = soundsData[soundName] {
       AudioServicesDisposeSystemSoundID(soundID)
       soundsData[soundName] = 0
     }
   }
   
-  func playSoundEffect(soundName: String) {
+  private func playSoundEffect(soundName: String) {
     if let soundID = soundsData[soundName] {
       AudioServicesPlaySystemSound(soundID)
     }
