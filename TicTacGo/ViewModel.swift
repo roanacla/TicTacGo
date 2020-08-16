@@ -58,27 +58,27 @@ public class ViewModel : ObservableObject {
     let middleSoundID: SystemSoundID = 0
     let endSoundID: SystemSoundID = 0
     soundsData = ["start.caf": startSoundID,
-                "middle.caf": middleSoundID,
-                "end.caf": endSoundID]
-    self.loadSoundEffects()
+                  "rest.caf": middleSoundID,
+                  "end.caf": endSoundID]
   }
   
   //MARK: - Functions
   
   func startTimer(completion: (()->())?) {
     let allowToStart = (lapTime.exerciseMinutes+lapTime.exerciseSeconds+lapTime.restMinutes+lapTime.restSeconds) > 0 ? true : false
-    memoryLapTime = lapTime
-    memoryLoops = loops
     var counter = 0
     if allowToStart {
+      memoryLapTime = lapTime
+      memoryLoops = loops
+      self.loadSoundEffects()
       self.currentTimePublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
       self.playSoundEffect(soundName: "start.caf")
       self.cancellable = currentTimePublisher?.sink { _ in
         counter += 1
-        if counter >= 10 {
+        if counter >= 5 {
           self.countDownByOne()
           if self.loops == 0 {
-            self.stopTimer()
+            self.finishTimer()
             completion?()
           }
         }
@@ -88,23 +88,35 @@ public class ViewModel : ObservableObject {
   
   func stopTimer() {
     self.currentTimePublisher?.upstream.connect().cancel()
-    self.cancelTimer()
-  }
-  
-  private func cancelTimer() {
+    self.unloadAllSoundEffects()
     self.lapTime = self.memoryLapTime
     self.loops = self.memoryLoops
   }
   
-  func countDownByOne() {
+  func finishTimer() {
+    self.playSoundEffect(soundName: "end.caf") { //First play end sound
+      self.unloadAllSoundEffects() //then it unloads all the sounds. 
+    }
+    self.currentTimePublisher?.upstream.connect().cancel()
+    self.lapTime = self.memoryLapTime
+    self.loops = self.memoryLoops
+  }
+  
+  private func countDownByOne() {
     if self.lapTime.exerciseSeconds != 0 {
       self.lapTime.exerciseSeconds -= 1
     } else if self.lapTime.exerciseMinutes > 0 {
       self.lapTime.exerciseMinutes -= 1
       self.lapTime.exerciseSeconds = 59
-    } else if self.lapTime.restSeconds != 0 {
-      self.lapTime.restSeconds -= 1
-    } else if self.lapTime.restMinutes > 0 {
+    } else if self.lapTime.restSeconds != 0 && loops > 1 {
+      if memoryLapTime.restSeconds == self.lapTime.restSeconds {
+        self.playSoundEffect(soundName: "rest.caf")
+      }
+      if self.lapTime.restSeconds == 5 {
+        self.playSoundEffect(soundName: "start.caf")
+      }
+      self.lapTime.restSeconds -= 1 //Goes after if statement
+    } else if self.lapTime.restMinutes > 0 && loops > 1 {
       self.lapTime.restMinutes -= 1
       self.lapTime.restSeconds = 59
     } else {
@@ -127,16 +139,21 @@ public class ViewModel : ObservableObject {
     }
   }
   
-  private func unloadSoundEffect(soundName: String) {
-    if let soundID = soundsData[soundName] {
-      AudioServicesDisposeSystemSoundID(soundID)
-      soundsData[soundName] = 0
+  private func unloadAllSoundEffects() {
+    for sound in soundsData {
+      AudioServicesDisposeSystemSoundID(sound.value)
     }
   }
   
-  private func playSoundEffect(soundName: String) {
+  private func playSoundEffect(soundName: String, completion: (()->())? = nil) {
     if let soundID = soundsData[soundName] {
-      AudioServicesPlaySystemSound(soundID)
+      if let completionBlock = completion {
+        AudioServicesPlaySystemSoundWithCompletion(soundID) {
+          completionBlock()
+        }
+      } else {
+        AudioServicesPlaySystemSound(soundID)
+      }
     }
   }
   
