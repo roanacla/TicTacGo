@@ -62,8 +62,7 @@ public class ViewModel : ObservableObject {
                   "end.caf": endSoundID]
   }
   
-  //MARK: - Functions
-  
+  //MARK: - Functions
   func startTimer(completion: (()->())?) {
     let allowToStart = (lapTime.exerciseMinutes+lapTime.exerciseSeconds+lapTime.restMinutes+lapTime.restSeconds) > 0 ? true : false
     var counter = 0
@@ -95,7 +94,7 @@ public class ViewModel : ObservableObject {
   
   func finishTimer() {
     self.playSoundEffect(soundName: "end.caf") { //First play end sound
-      self.unloadAllSoundEffects() //then it unloads all the sounds. 
+      self.unloadAllSoundEffects() //then it unloads all the sounds.
     }
     self.currentTimePublisher?.upstream.connect().cancel()
     self.lapTime = self.memoryLapTime
