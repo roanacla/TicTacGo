@@ -46,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DB0C07AA24EB613000DD14A0 /* TicTacGo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TicTacGo.entitlements; sourceTree = "<group>"; };
 		DBABFEBD24DCC02F00669C6F /* TicTacGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBABFEC024DCC02F00669C6F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DBABFEC224DCC02F00669C6F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -115,6 +116,7 @@
 		DBABFEBF24DCC02F00669C6F /* TicTacGo */ = {
 			isa = PBXGroup;
 			children = (
+				DB0C07AA24EB613000DD14A0 /* TicTacGo.entitlements */,
 				DBCBEE5824E99F36003E24F7 /* Sound */,
 				DBABFEC024DCC02F00669C6F /* AppDelegate.swift */,
 				DBABFEC224DCC02F00669C6F /* SceneDelegate.swift */,
@@ -474,11 +476,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TicTacGo/TicTacGo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"TicTacGo/Preview Content\"";
 				DEVELOPMENT_TEAM = G3B2ACWEFM;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = TicTacGo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -494,11 +498,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = TicTacGo/TicTacGo.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"TicTacGo/Preview Content\"";
 				DEVELOPMENT_TEAM = G3B2ACWEFM;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = TicTacGo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

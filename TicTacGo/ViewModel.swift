@@ -20,6 +20,9 @@ public struct LapTime: CustomStringConvertible {
     return exerciseMinutes*60 + exerciseSeconds + restMinutes*60 + restSeconds
   }
   
+  var totalExerciseMinutes: Int {
+    return exerciseMinutes * 60 + exerciseSeconds
+  }
   var isZero: Bool {
     return (exerciseMinutes + exerciseSeconds + restMinutes + restSeconds) == 0 ? true : false
   }
@@ -41,6 +44,41 @@ public struct LapTime: CustomStringConvertible {
   }
 }
 
+struct NotificationTimes: CustomStringConvertible {
+  var description: String {
+    let startTimeDescription = "🟢The exercise will start at \(startTime)\n"
+    let endTimeDescription = "🔴The exercise will end at \(endTime)\n"
+    
+    var restTimesDescription = ""
+    var endOfRestTimesDescription = ""
+    var index = 1
+    for restTime in restTimes {
+      
+      restTimesDescription += "☀️The timer \(index) will start at: \(restTime)\n"
+      index += 1
+    }
+    index = 1
+    for endRestTime in endOfRestTimes {
+      endOfRestTimesDescription += "🌑The end of Timer \(index) will be at \(endRestTime)\n"
+      index += 1
+    }
+    
+    return startTimeDescription + endTimeDescription + restTimesDescription + endOfRestTimesDescription
+  }
+  
+  var startTime: Date = Date()
+  var endTime: Date = Date()
+  var restTimes: [Date] = []
+  var endOfRestTimes: [Date] = []
+  
+  mutating func reset() {
+    startTime = Date()
+    endTime = Date()
+    restTimes = []
+    endOfRestTimes = []
+  }
+}
+
 public class ViewModel : ObservableObject {
   //MARK: - Properties
   private var currentTimePublisher: Publishers.Autoconnect<Timer.TimerPublisher>?
@@ -48,6 +86,7 @@ public class ViewModel : ObservableObject {
   private var memoryLapTime = LapTime()
   private var memoryLoops: Double = 1
   private var soundsData: [String: SystemSoundID]
+  var notificationTimes = NotificationTimes()
   
   @Published var lapTime = LapTime()
   @Published var loops: Double = 1
@@ -72,10 +111,17 @@ public class ViewModel : ObservableObject {
       self.loadSoundEffects()
       self.currentTimePublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
       self.playSoundEffect(soundName: "start.caf")
+      self.calculateWhenToPlaySounds()
+      print(self.notificationTimes.description)
       self.cancellable = currentTimePublisher?.sink { _ in
         counter += 1
         if counter >= 5 {
           self.countDownByOne()
+          if self.lapTime.isZero || (self.loops == 1 && self.lapTime.exerciseMinutes + self.lapTime.exerciseSeconds == 0)  {
+            print("🔴 BRRRR BRRR BRRRR Finish loop \(Date())")
+            self.loops -= 1
+            self.lapTime = self.memoryLapTime
+          }
           if self.loops == 0 {
             self.finishTimer()
             completion?()
@@ -90,15 +136,18 @@ public class ViewModel : ObservableObject {
     self.unloadAllSoundEffects()
     self.lapTime = self.memoryLapTime
     self.loops = self.memoryLoops
+    self.notificationTimes.reset()
   }
   
   func finishTimer() {
+    print("⏰ Finished \(Date())")
     self.playSoundEffect(soundName: "end.caf") { //First play end sound
       self.unloadAllSoundEffects() //then it unloads all the sounds.
     }
     self.currentTimePublisher?.upstream.connect().cancel()
     self.lapTime = self.memoryLapTime
     self.loops = self.memoryLoops
+    self.notificationTimes.reset()
   }
   
   private func countDownByOne() {
@@ -108,20 +157,40 @@ public class ViewModel : ObservableObject {
       self.lapTime.exerciseMinutes -= 1
       self.lapTime.exerciseSeconds = 59
     } else if self.lapTime.restSeconds != 0 && loops > 1 {
-      if memoryLapTime.restSeconds == self.lapTime.restSeconds {
-        self.playSoundEffect(soundName: "rest.caf")
-      }
-      if self.lapTime.restSeconds == 5 {
-        self.playSoundEffect(soundName: "start.caf")
-      }
-      self.lapTime.restSeconds -= 1 //Goes after if statement
+      self.lapTime.restSeconds -= 1
     } else if self.lapTime.restMinutes > 0 && loops > 1 {
       self.lapTime.restMinutes -= 1
       self.lapTime.restSeconds = 59
-    } else {
-      print("🔴 BRRRR BRRR BRRRR Finish loop")
-      self.loops -= 1
-      self.lapTime = memoryLapTime
+    }
+  }
+  
+  private func calculateWhenToPlaySounds() {
+    var isFirstLoop = false
+    
+    //Create immediate push notification
+    self.notificationTimes.startTime = Date()
+    print(Date())
+    
+    //Create end notification
+    let startEndExerciseAfter = 4 + (lapTime.totalSeconds * Int(self.loops)) - (lapTime.restMinutes * 60 + lapTime.restSeconds)
+    self.notificationTimes.endTime = Date().addingTimeInterval(Double(startEndExerciseAfter))
+    
+    var startRestAfter = 0
+    for _ in 0..<Int(self.loops) {
+      //Create all start-rest notifications
+      if !isFirstLoop {
+        startRestAfter = 4 + (lapTime.exerciseMinutes * 60 + lapTime.exerciseSeconds)
+        isFirstLoop = true
+      } else {
+        startRestAfter += lapTime.totalSeconds
+      }
+      self.notificationTimes.restTimes.append(Date().addingTimeInterval(Double(startRestAfter)))
+      //Create all end-rest notifications
+      let startEndRestAfter = startRestAfter + lapTime.restMinutes * 60 + lapTime.restSeconds
+      self.notificationTimes.endOfRestTimes.append(Date().addingTimeInterval(Double(startEndRestAfter)))
+    }
+    if self.notificationTimes.endOfRestTimes.count > 0 {
+      self.notificationTimes.endOfRestTimes.removeLast()
     }
   }
   
