@@ -33,11 +33,11 @@ struct ContentView: View {
         .padding()
       GeometryReader { geometry in
         HStack{
-          TimePicker(timeUnits: self.$timer.lapTime.exerciseMinutes,
+          TimePicker(timeUnits: self.$timer.setTime.exercise.minutes,
                      unitsRange: 0..<6,
                      unitsRangeLabel: "min")
             .frame(maxWidth: geometry.size.width / 2)
-          TimePicker(timeUnits: self.$timer.lapTime.exerciseSeconds,
+          TimePicker(timeUnits: self.$timer.setTime.exercise.seconds,
                      unitsRange: 0..<60,
                      unitsRangeLabel: "sec")
             .frame(maxWidth: geometry.size.width / 2)
@@ -47,11 +47,11 @@ struct ContentView: View {
         .padding()
       GeometryReader { geometry in
         HStack{
-          TimePicker(timeUnits: self.$timer.lapTime.restMinutes,
+          TimePicker(timeUnits: self.$timer.setTime.rest.minutes,
                      unitsRange: 0..<6,
                      unitsRangeLabel: "min")
             .frame(maxWidth: geometry.size.width / 2)
-          TimePicker(timeUnits: self.$timer.lapTime.restSeconds,
+          TimePicker(timeUnits: self.$timer.setTime.rest.seconds,
                      unitsRange: 0..<60,
                      unitsRangeLabel: "sec")
             .frame(maxWidth: geometry.size.width / 2)
@@ -69,7 +69,7 @@ struct ContentView: View {
       Button(action: isTimerRunning ? self.stop : self.start,
              label: { Text(isTimerRunning ? "Cancel" : "Start") }
       )
-        .disabled(self.timer.lapTime.isZero)
+        .disabled(self.timer.setTime.isZero)
         .padding()
     }
   }

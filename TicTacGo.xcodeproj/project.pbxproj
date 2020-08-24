@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		DB1BC54824F092470054C073 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC54724F092470054C073 /* NotificationScheduler.swift */; };
+		DB58D9C524F4751D00507762 /* TimerNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB58D9C424F4751D00507762 /* TimerNotifications.swift */; };
+		DB58D9C724F4771700507762 /* SetTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB58D9C624F4771700507762 /* SetTime.swift */; };
 		DBABFEC124DCC02F00669C6F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEC024DCC02F00669C6F /* AppDelegate.swift */; };
 		DBABFEC324DCC02F00669C6F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEC224DCC02F00669C6F /* SceneDelegate.swift */; };
 		DBABFEC624DCC02F00669C6F /* TicTacGo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEC424DCC02F00669C6F /* TicTacGo.xcdatamodeld */; };
@@ -49,6 +51,8 @@
 /* Begin PBXFileReference section */
 		DB0C07AA24EB613000DD14A0 /* TicTacGo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TicTacGo.entitlements; sourceTree = "<group>"; };
 		DB1BC54724F092470054C073 /* NotificationScheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationScheduler.swift; sourceTree = "<group>"; };
+		DB58D9C424F4751D00507762 /* TimerNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerNotifications.swift; sourceTree = "<group>"; };
+		DB58D9C624F4771700507762 /* SetTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetTime.swift; sourceTree = "<group>"; };
 		DBABFEBD24DCC02F00669C6F /* TicTacGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBABFEC024DCC02F00669C6F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DBABFEC224DCC02F00669C6F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -95,6 +99,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DB58D9C324F4750200507762 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				DB58D9C424F4751D00507762 /* TimerNotifications.swift */,
+				DB58D9C624F4771700507762 /* SetTime.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		DBABFEB424DCC02F00669C6F = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +131,7 @@
 		DBABFEBF24DCC02F00669C6F /* TicTacGo */ = {
 			isa = PBXGroup;
 			children = (
+				DB58D9C324F4750200507762 /* Models */,
 				DB0C07AA24EB613000DD14A0 /* TicTacGo.entitlements */,
 				DBCBEE5824E99F36003E24F7 /* Sound */,
 				DBABFEC024DCC02F00669C6F /* AppDelegate.swift */,
@@ -313,6 +327,8 @@
 				DBABFEF424DCCAAA00669C6F /* ViewModel.swift in Sources */,
 				DBABFEC124DCC02F00669C6F /* AppDelegate.swift in Sources */,
 				DBABFEC324DCC02F00669C6F /* SceneDelegate.swift in Sources */,
+				DB58D9C724F4771700507762 /* SetTime.swift in Sources */,
+				DB58D9C524F4751D00507762 /* TimerNotifications.swift in Sources */,
 				DBABFEC824DCC02F00669C6F /* ContentView.swift in Sources */,
 				DB1BC54824F092470054C073 /* NotificationScheduler.swift in Sources */,
 				DBABFEC624DCC02F00669C6F /* TicTacGo.xcdatamodeld in Sources */,

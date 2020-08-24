@@ -30,18 +30,22 @@ import UIKit
 import UserNotifications
 
 protocol NotificationScheduler {
-  func scheduleNotification(title: String, trigger: UNNotificationTrigger, sound: Bool, badge: String?)
+  func scheduleNotification(title: String, trigger: UNNotificationTrigger, sound: Bool, soundName: String?, badge: String?)
 }
 
-extension NotificationScheduler where Self: ViewModel {
-  func scheduleNotification(title: String, trigger: UNNotificationTrigger, sound: Bool, badge: String?) {
+extension NotificationScheduler where Self: TimerNotifications {
+  func scheduleNotification(title: String, trigger: UNNotificationTrigger, sound: Bool, soundName: String? = nil, badge: String?) {
     let ws = CharacterSet.whitespacesAndNewlines
 
     let content = UNMutableNotificationContent()
     content.title = title
 
     if sound {
-      content.sound = UNNotificationSound.default
+      if let soundName = soundName {
+        content.sound = UNNotificationSound.init(named: .init(soundName))
+      } else {
+        content.sound = UNNotificationSound.default
+      }
     }
 
     if let badge = badge, let number = Int(badge) {

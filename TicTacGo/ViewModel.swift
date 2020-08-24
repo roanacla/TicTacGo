@@ -11,86 +11,17 @@ import Combine
 import AudioToolbox
 import UserNotifications
 
-public struct LapTime: CustomStringConvertible {
-  var exerciseMinutes = 0
-  var exerciseSeconds = 0
-  var restMinutes = 0
-  var restSeconds = 0
-  
-  var totalSeconds: Int {
-    return exerciseMinutes*60 + exerciseSeconds + restMinutes*60 + restSeconds
-  }
-  
-  var totalExerciseMinutes: Int {
-    return exerciseMinutes * 60 + exerciseSeconds
-  }
-  var isZero: Bool {
-    return (exerciseMinutes + exerciseSeconds + restMinutes + restSeconds) == 0 ? true : false
-  }
-  
-  mutating func reset() {
-    exerciseMinutes = 0
-    exerciseSeconds = 0
-    restMinutes = 0
-    restSeconds = 0
-  }
-  
-  public var description: String {
-    return """
-    Exercise Minutes: \(exerciseMinutes)
-    Exercise Seconds: \(exerciseSeconds)
-    Rest Minutes: \(restMinutes)
-    Rest Seconds: \(restSeconds)
-    """
-  }
-}
-
-struct NotificationTimes: CustomStringConvertible {
-  var description: String {
-    let startTimeDescription = "🟢The exercise will start at \(startTime)\n"
-    let endTimeDescription = "🔴The exercise will end at \(endTime)\n"
-    
-    var restTimesDescription = ""
-    var endOfRestTimesDescription = ""
-    var index = 1
-    for restTime in restTimes {
-      
-      restTimesDescription += "☀️The timer \(index) will start at: \(restTime)\n"
-      index += 1
-    }
-    index = 1
-    for endRestTime in endOfRestTimes {
-      endOfRestTimesDescription += "🌑The end of Timer \(index) will be at \(endRestTime)\n"
-      index += 1
-    }
-    
-    return startTimeDescription + endTimeDescription + restTimesDescription + endOfRestTimesDescription
-  }
-  
-  var startTime: Date = Date()
-  var endTime: Date = Date()
-  var restTimes: [Date] = []
-  var endOfRestTimes: [Date] = []
-  
-  mutating func reset() {
-    startTime = Date()
-    endTime = Date()
-    restTimes = []
-    endOfRestTimes = []
-  }
-}
-
-class ViewModel : ObservableObject, NotificationScheduler {
+class ViewModel : ObservableObject{
   
   //MARK: - Properties
   private var currentTimePublisher: Publishers.Autoconnect<Timer.TimerPublisher>?
   private var cancellable: AnyCancellable?
-  private var memoryLapTime = LapTime()
+  private var memoryLapTime = SetTime()
   private var memoryLoops: Double = 1
   private var soundsData: [String: SystemSoundID]
-  var notificationTimes = NotificationTimes()
+  var notificationTimes = TimerNotifications()
   
-  @Published var lapTime = LapTime()
+  @Published var setTime = SetTime()
   @Published var loops: Double = 1
   
   //MARK: - Initializer
@@ -112,24 +43,24 @@ class ViewModel : ObservableObject, NotificationScheduler {
   
   //MARK: - Functions
   func startTimer(completion: (()->())?) {
-    let allowToStart = (lapTime.exerciseMinutes+lapTime.exerciseSeconds+lapTime.restMinutes+lapTime.restSeconds) > 0 ? true : false
+    let allowToStart = (setTime.exercise.minutes+setTime.exercise.seconds+setTime.rest.minutes+setTime.rest.seconds) > 0 ? true : false
     var counter = 0
     if allowToStart {
-      memoryLapTime = lapTime
+      memoryLapTime = setTime
       memoryLoops = loops
       self.loadSoundEffects()
       self.currentTimePublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-      self.playSoundEffect(soundName: "start.caf")
-      self.calculateWhenToPlaySounds()
+//      self.playSoundEffect(soundName: "start.caf")
+      self.createLocalNotifications()
       print(self.notificationTimes.description)
       self.cancellable = currentTimePublisher?.sink { _ in
         counter += 1
         if counter >= 5 {
           self.countDownByOne()
-          if self.lapTime.isZero || (self.loops == 1 && self.lapTime.exerciseMinutes + self.lapTime.exerciseSeconds == 0)  {
+          if self.setTime.isZero || (self.loops == 1 && self.setTime.exercise.minutes + self.setTime.exercise.seconds == 0)  {
             print("🔴 BRRRR BRRR BRRRR Finish loop \(Date())")
             self.loops -= 1
-            self.lapTime = self.memoryLapTime
+            self.setTime = self.memoryLapTime
           }
           if self.loops == 0 {
             self.finishTimer()
@@ -142,66 +73,68 @@ class ViewModel : ObservableObject, NotificationScheduler {
   
   func stopTimer() {
     self.currentTimePublisher?.upstream.connect().cancel()
-    self.unloadAllSoundEffects()
-    self.lapTime = self.memoryLapTime
+//    self.unloadAllSoundEffects()
+    self.setTime = self.memoryLapTime
     self.loops = self.memoryLoops
     self.notificationTimes.reset()
   }
   
   func finishTimer() {
     print("⏰ Finished \(Date())")
-    self.playSoundEffect(soundName: "end.caf") { //First play end sound
-      self.unloadAllSoundEffects() //then it unloads all the sounds.
-    }
+//    self.playSoundEffect(soundName: "end.caf") { //First play end sound
+//      self.unloadAllSoundEffects() //then it unloads all the sounds.
+//    }
     self.currentTimePublisher?.upstream.connect().cancel()
-    self.lapTime = self.memoryLapTime
+    self.setTime = self.memoryLapTime
     self.loops = self.memoryLoops
     self.notificationTimes.reset()
   }
   
   private func countDownByOne() {
-    if self.lapTime.exerciseSeconds != 0 {
-      self.lapTime.exerciseSeconds -= 1
-    } else if self.lapTime.exerciseMinutes > 0 {
-      self.lapTime.exerciseMinutes -= 1
-      self.lapTime.exerciseSeconds = 59
-    } else if self.lapTime.restSeconds != 0 && loops > 1 {
-      self.lapTime.restSeconds -= 1
-    } else if self.lapTime.restMinutes > 0 && loops > 1 {
-      self.lapTime.restMinutes -= 1
-      self.lapTime.restSeconds = 59
+    if self.setTime.exercise.seconds != 0 {
+      self.setTime.exercise.seconds -= 1
+    } else if self.setTime.exercise.minutes > 0 {
+      self.setTime.exercise.minutes -= 1
+      self.setTime.exercise.seconds = 59
+    } else if self.setTime.rest.seconds != 0 && loops > 1 {
+      self.setTime.rest.seconds -= 1
+    } else if self.setTime.rest.minutes > 0 && loops > 1 {
+      self.setTime.rest.minutes -= 1
+      self.setTime.rest.seconds = 59
     }
   }
   
-  private func calculateWhenToPlaySounds() {
+  private func createLocalNotifications() {
     var isFirstLoop = false
     
     //Create immediate push notification
     self.notificationTimes.startTime = Date()
-    print(Date())
+//    createNotification(at: self.notificationTimes.startTime)
     
     //Create end notification
-    let startEndExerciseAfter = 4 + (lapTime.totalSeconds * Int(self.loops)) - (lapTime.restMinutes * 60 + lapTime.restSeconds)
+    let startEndExerciseAfter = 4 + (setTime.totalSeconds * Int(self.loops)) - (setTime.rest.minutes * 60 + setTime.rest.seconds)
     self.notificationTimes.endTime = Date().addingTimeInterval(Double(startEndExerciseAfter))
-    createNotification(at: self.notificationTimes.endTime)
+//    createNotification(at: self.notificationTimes.endTime)
     
     var startRestAfter = 0
     for _ in 0..<Int(self.loops) {
       //Create all start-rest notifications
       if !isFirstLoop {
-        startRestAfter = 4 + (lapTime.exerciseMinutes * 60 + lapTime.exerciseSeconds)
+        startRestAfter = 4 + (setTime.exercise.minutes * 60 + setTime.exercise.seconds)
         isFirstLoop = true
       } else {
-        startRestAfter += lapTime.totalSeconds
+        startRestAfter += setTime.totalSeconds
       }
       self.notificationTimes.restTimes.append(Date().addingTimeInterval(Double(startRestAfter)))
       //Create all end-rest notifications
-      let startEndRestAfter = startRestAfter + lapTime.restMinutes * 60 + lapTime.restSeconds
+      let startEndRestAfter = startRestAfter + setTime.rest.minutes * 60 + setTime.rest.seconds
       self.notificationTimes.endOfRestTimes.append(Date().addingTimeInterval(Double(startEndRestAfter)))
     }
     if self.notificationTimes.endOfRestTimes.count > 0 {
       self.notificationTimes.endOfRestTimes.removeLast()
     }
+    
+    self.notificationTimes.createNotifications()
   }
   
   //MARK: - Sound Functions
@@ -233,24 +166,6 @@ class ViewModel : ObservableObject, NotificationScheduler {
         AudioServicesPlaySystemSound(soundID)
       }
     }
-  }
-  
-  //MARK: - Nofication Functions
-  
-  func createNotification(at date: Date) {
-    var components = DateComponents()
-    let calendar = Calendar.current
-    
-    components.second = calendar.component(.second, from: date)
-    components.minute = calendar.component(.minute, from: date)
-    components.hour = calendar.component(.hour, from: date)
-    
-    let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-    scheduleNotification(
-      title: "Time!",
-      trigger: trigger,
-      sound: true,
-      badge: nil)
   }
   
   deinit {
