@@ -9,6 +9,7 @@
 import Foundation
 import Combine
 import AudioToolbox
+import UserNotifications
 
 public struct LapTime: CustomStringConvertible {
   var exerciseMinutes = 0
@@ -79,7 +80,8 @@ struct NotificationTimes: CustomStringConvertible {
   }
 }
 
-public class ViewModel : ObservableObject {
+class ViewModel : ObservableObject, NotificationScheduler {
+  
   //MARK: - Properties
   private var currentTimePublisher: Publishers.Autoconnect<Timer.TimerPublisher>?
   private var cancellable: AnyCancellable?
@@ -99,6 +101,13 @@ public class ViewModel : ObservableObject {
     soundsData = ["start.caf": startSoundID,
                   "rest.caf": middleSoundID,
                   "end.caf": endSoundID]
+    UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+        if success {
+            print("All set!")
+        } else if let error = error {
+            print(error.localizedDescription)
+        }
+    }
   }
   
   //MARK: - Functions
@@ -174,6 +183,7 @@ public class ViewModel : ObservableObject {
     //Create end notification
     let startEndExerciseAfter = 4 + (lapTime.totalSeconds * Int(self.loops)) - (lapTime.restMinutes * 60 + lapTime.restSeconds)
     self.notificationTimes.endTime = Date().addingTimeInterval(Double(startEndExerciseAfter))
+    createNotification(at: self.notificationTimes.endTime)
     
     var startRestAfter = 0
     for _ in 0..<Int(self.loops) {
@@ -223,6 +233,24 @@ public class ViewModel : ObservableObject {
         AudioServicesPlaySystemSound(soundID)
       }
     }
+  }
+  
+  //MARK: - Nofication Functions
+  
+  func createNotification(at date: Date) {
+    var components = DateComponents()
+    let calendar = Calendar.current
+    
+    components.second = calendar.component(.second, from: date)
+    components.minute = calendar.component(.minute, from: date)
+    components.hour = calendar.component(.hour, from: date)
+    
+    let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+    scheduleNotification(
+      title: "Time!",
+      trigger: trigger,
+      sound: true,
+      badge: nil)
   }
   
   deinit {

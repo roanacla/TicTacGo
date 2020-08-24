@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DB1BC54824F092470054C073 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC54724F092470054C073 /* NotificationScheduler.swift */; };
 		DBABFEC124DCC02F00669C6F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEC024DCC02F00669C6F /* AppDelegate.swift */; };
 		DBABFEC324DCC02F00669C6F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEC224DCC02F00669C6F /* SceneDelegate.swift */; };
 		DBABFEC624DCC02F00669C6F /* TicTacGo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEC424DCC02F00669C6F /* TicTacGo.xcdatamodeld */; };
@@ -47,6 +48,7 @@
 
 /* Begin PBXFileReference section */
 		DB0C07AA24EB613000DD14A0 /* TicTacGo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TicTacGo.entitlements; sourceTree = "<group>"; };
+		DB1BC54724F092470054C073 /* NotificationScheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationScheduler.swift; sourceTree = "<group>"; };
 		DBABFEBD24DCC02F00669C6F /* TicTacGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBABFEC024DCC02F00669C6F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DBABFEC224DCC02F00669C6F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 				DBABFEC224DCC02F00669C6F /* SceneDelegate.swift */,
 				DBABFEC724DCC02F00669C6F /* ContentView.swift */,
 				DBABFEF324DCCAAA00669C6F /* ViewModel.swift */,
+				DB1BC54724F092470054C073 /* NotificationScheduler.swift */,
 				DBABFEC924DCC03100669C6F /* Assets.xcassets */,
 				DBABFECE24DCC03100669C6F /* LaunchScreen.storyboard */,
 				DBABFED124DCC03100669C6F /* Info.plist */,
@@ -311,6 +314,7 @@
 				DBABFEC124DCC02F00669C6F /* AppDelegate.swift in Sources */,
 				DBABFEC324DCC02F00669C6F /* SceneDelegate.swift in Sources */,
 				DBABFEC824DCC02F00669C6F /* ContentView.swift in Sources */,
+				DB1BC54824F092470054C073 /* NotificationScheduler.swift in Sources */,
 				DBABFEC624DCC02F00669C6F /* TicTacGo.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
