@@ -24,7 +24,7 @@ class TimerNotifications: CustomStringConvertible, NotificationScheduler {
     endOfRestTimes = []
   }
   
-  private func createNotification(at date: Date, title: String, soundName: String) {
+  func createNotification(at date: Date, title: String, soundName: SoundName) {
     var components = DateComponents()
     let calendar = Calendar.current
     
@@ -37,19 +37,19 @@ class TimerNotifications: CustomStringConvertible, NotificationScheduler {
       title: title,
       trigger: trigger,
       sound: true,
-      soundName: soundName,
+      soundName: soundName.rawValue,
       badge: nil)
   }
   
   func createNotifications() {
-    createNotification(at: startTime, title: "Start", soundName: "start.caf")
-    createNotification(at: endTime, title: "End of workout", soundName: "end.caf")
+    createNotification(at: startTime, title: "Start", soundName: .start)
+    createNotification(at: endTime, title: "End of workout", soundName: .end)
     for startRest in restTimes {
-      createNotification(at: startRest, title: "Time to rest", soundName: "rest.caf")
+      createNotification(at: startRest, title: "Time to rest", soundName: .rest)
     }
     
     for endRest in endOfRestTimes {
-      createNotification(at: endRest, title: "Time to start again", soundName: "start.caf")
+      createNotification(at: endRest, title: "Time to start again", soundName: .start)
     }
   }
   
@@ -61,10 +61,10 @@ class TimerNotifications: CustomStringConvertible, NotificationScheduler {
     var endOfRestTimesDescription = ""
     var index = 1
     for restTime in restTimes {
-      
       restTimesDescription += "☀️The timer \(index) will start at: \(restTime)\n"
       index += 1
     }
+    
     index = 1
     for endRestTime in endOfRestTimes {
       endOfRestTimesDescription += "🌑The end of Timer \(index) will be at \(endRestTime)\n"

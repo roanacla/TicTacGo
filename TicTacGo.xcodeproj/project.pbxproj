@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		DB1BC54824F092470054C073 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC54724F092470054C073 /* NotificationScheduler.swift */; };
+		DB51D7CF24F5C0380056776D /* SystemSounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB51D7CE24F5C0380056776D /* SystemSounds.swift */; };
+		DB51D7D324F5C55E0056776D /* start.caf in Resources */ = {isa = PBXBuildFile; fileRef = DB51D7D224F5C55E0056776D /* start.caf */; };
 		DB58D9C524F4751D00507762 /* TimerNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB58D9C424F4751D00507762 /* TimerNotifications.swift */; };
 		DB58D9C724F4771700507762 /* SetTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB58D9C624F4771700507762 /* SetTime.swift */; };
 		DBABFEC124DCC02F00669C6F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEC024DCC02F00669C6F /* AppDelegate.swift */; };
@@ -20,9 +22,6 @@
 		DBABFEDB24DCC03100669C6F /* TicTacGoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEDA24DCC03100669C6F /* TicTacGoTests.swift */; };
 		DBABFEE624DCC03100669C6F /* TicTacGoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEE524DCC03100669C6F /* TicTacGoUITests.swift */; };
 		DBABFEF424DCCAAA00669C6F /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBABFEF324DCCAAA00669C6F /* ViewModel.swift */; };
-		DBCBEE5B24E99F6A003E24F7 /* start.caf in Resources */ = {isa = PBXBuildFile; fileRef = DBCBEE5924E99F6A003E24F7 /* start.caf */; };
-		DBCBEE5C24E99F6A003E24F7 /* start.caf in Resources */ = {isa = PBXBuildFile; fileRef = DBCBEE5924E99F6A003E24F7 /* start.caf */; };
-		DBCBEE5D24E99F6A003E24F7 /* start.caf in Resources */ = {isa = PBXBuildFile; fileRef = DBCBEE5924E99F6A003E24F7 /* start.caf */; };
 		DBCBEE5E24E99F6A003E24F7 /* rest.caf in Resources */ = {isa = PBXBuildFile; fileRef = DBCBEE5A24E99F6A003E24F7 /* rest.caf */; };
 		DBCBEE5F24E99F6A003E24F7 /* rest.caf in Resources */ = {isa = PBXBuildFile; fileRef = DBCBEE5A24E99F6A003E24F7 /* rest.caf */; };
 		DBCBEE6024E99F6A003E24F7 /* rest.caf in Resources */ = {isa = PBXBuildFile; fileRef = DBCBEE5A24E99F6A003E24F7 /* rest.caf */; };
@@ -51,6 +50,8 @@
 /* Begin PBXFileReference section */
 		DB0C07AA24EB613000DD14A0 /* TicTacGo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TicTacGo.entitlements; sourceTree = "<group>"; };
 		DB1BC54724F092470054C073 /* NotificationScheduler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationScheduler.swift; sourceTree = "<group>"; };
+		DB51D7CE24F5C0380056776D /* SystemSounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemSounds.swift; sourceTree = "<group>"; };
+		DB51D7D224F5C55E0056776D /* start.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = start.caf; sourceTree = "<group>"; };
 		DB58D9C424F4751D00507762 /* TimerNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerNotifications.swift; sourceTree = "<group>"; };
 		DB58D9C624F4771700507762 /* SetTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetTime.swift; sourceTree = "<group>"; };
 		DBABFEBD24DCC02F00669C6F /* TicTacGo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacGo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -69,7 +70,6 @@
 		DBABFEE524DCC03100669C6F /* TicTacGoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicTacGoUITests.swift; sourceTree = "<group>"; };
 		DBABFEE724DCC03100669C6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DBABFEF324DCCAAA00669C6F /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
-		DBCBEE5924E99F6A003E24F7 /* start.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = start.caf; sourceTree = "<group>"; };
 		DBCBEE5A24E99F6A003E24F7 /* rest.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = rest.caf; sourceTree = "<group>"; };
 		DBCBEE6124E9BB38003E24F7 /* end.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = end.caf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -104,6 +104,7 @@
 			children = (
 				DB58D9C424F4751D00507762 /* TimerNotifications.swift */,
 				DB58D9C624F4771700507762 /* SetTime.swift */,
+				DB51D7CE24F5C0380056776D /* SystemSounds.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -179,7 +180,7 @@
 			children = (
 				DBCBEE5A24E99F6A003E24F7 /* rest.caf */,
 				DBCBEE6124E9BB38003E24F7 /* end.caf */,
-				DBCBEE5924E99F6A003E24F7 /* start.caf */,
+				DB51D7D224F5C55E0056776D /* start.caf */,
 			);
 			path = Sound;
 			sourceTree = "<group>";
@@ -291,9 +292,9 @@
 				DBCBEE6224E9BB38003E24F7 /* end.caf in Resources */,
 				DBABFED024DCC03100669C6F /* LaunchScreen.storyboard in Resources */,
 				DBABFECD24DCC03100669C6F /* Preview Assets.xcassets in Resources */,
+				DB51D7D324F5C55E0056776D /* start.caf in Resources */,
 				DBABFECA24DCC03100669C6F /* Assets.xcassets in Resources */,
 				DBCBEE5E24E99F6A003E24F7 /* rest.caf in Resources */,
-				DBCBEE5B24E99F6A003E24F7 /* start.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -303,7 +304,6 @@
 			files = (
 				DBCBEE6324E9BB38003E24F7 /* end.caf in Resources */,
 				DBCBEE5F24E99F6A003E24F7 /* rest.caf in Resources */,
-				DBCBEE5C24E99F6A003E24F7 /* start.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,7 +313,6 @@
 			files = (
 				DBCBEE6424E9BB38003E24F7 /* end.caf in Resources */,
 				DBCBEE6024E99F6A003E24F7 /* rest.caf in Resources */,
-				DBCBEE5D24E99F6A003E24F7 /* start.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,6 +325,7 @@
 			files = (
 				DBABFEF424DCCAAA00669C6F /* ViewModel.swift in Sources */,
 				DBABFEC124DCC02F00669C6F /* AppDelegate.swift in Sources */,
+				DB51D7CF24F5C0380056776D /* SystemSounds.swift in Sources */,
 				DBABFEC324DCC02F00669C6F /* SceneDelegate.swift in Sources */,
 				DB58D9C724F4771700507762 /* SetTime.swift in Sources */,
 				DB58D9C524F4751D00507762 /* TimerNotifications.swift in Sources */,

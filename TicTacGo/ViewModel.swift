@@ -18,7 +18,7 @@ class ViewModel : ObservableObject{
   private var cancellable: AnyCancellable?
   private var memoryLapTime = SetTime()
   private var memoryLoops: Double = 1
-  private var soundsData: [String: SystemSoundID]
+  
   var notificationTimes = TimerNotifications()
   
   @Published var setTime = SetTime()
@@ -26,12 +26,6 @@ class ViewModel : ObservableObject{
   
   //MARK: - Initializer
   init() {
-    let startSoundID: SystemSoundID = 0
-    let middleSoundID: SystemSoundID = 0
-    let endSoundID: SystemSoundID = 0
-    soundsData = ["start.caf": startSoundID,
-                  "rest.caf": middleSoundID,
-                  "end.caf": endSoundID]
     UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
         if success {
             print("All set!")
@@ -48,12 +42,11 @@ class ViewModel : ObservableObject{
     if allowToStart {
       memoryLapTime = setTime
       memoryLoops = loops
-      self.loadSoundEffects()
+      SystemSounds.loadSoundEffects()
       self.currentTimePublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-//      self.playSoundEffect(soundName: "start.caf")
-      self.createLocalNotifications()
       print(self.notificationTimes.description)
-      self.cancellable = currentTimePublisher?.sink { _ in
+      self.notificationTimes.createNotification(at: Date().addingTimeInterval(1.0), title: "Start", soundName: .start)
+      self.cancellable = currentTimePublisher?.sink { value in
         counter += 1
         if counter >= 5 {
           self.countDownByOne()
@@ -108,13 +101,11 @@ class ViewModel : ObservableObject{
     var isFirstLoop = false
     
     //Create immediate push notification
-    self.notificationTimes.startTime = Date()
-//    createNotification(at: self.notificationTimes.startTime)
+//    self.notificationTimes.startTime = Date()
     
     //Create end notification
     let startEndExerciseAfter = 4 + (setTime.totalSeconds * Int(self.loops)) - (setTime.rest.minutes * 60 + setTime.rest.seconds)
     self.notificationTimes.endTime = Date().addingTimeInterval(Double(startEndExerciseAfter))
-//    createNotification(at: self.notificationTimes.endTime)
     
     var startRestAfter = 0
     for _ in 0..<Int(self.loops) {
@@ -135,37 +126,6 @@ class ViewModel : ObservableObject{
     }
     
     self.notificationTimes.createNotifications()
-  }
-  
-  //MARK: - Sound Functions
-  private func loadSoundEffects() {
-    for soundID in soundsData {
-      if let path = Bundle.main.path(forResource: soundID.key, ofType: nil) {
-        let fileURL = URL(fileURLWithPath: path, isDirectory: false)
-        let error = AudioServicesCreateSystemSoundID(fileURL as CFURL, &soundsData[soundID.key]!)
-        if error != kAudioServicesNoError {
-          print("Error code \(error) loading sound: \(path)")
-        }
-      }
-    }
-  }
-  
-  private func unloadAllSoundEffects() {
-    for sound in soundsData {
-      AudioServicesDisposeSystemSoundID(sound.value)
-    }
-  }
-  
-  private func playSoundEffect(soundName: String, completion: (()->())? = nil) {
-    if let soundID = soundsData[soundName] {
-      if let completionBlock = completion {
-        AudioServicesPlaySystemSoundWithCompletion(soundID) {
-          completionBlock()
-        }
-      } else {
-        AudioServicesPlaySystemSound(soundID)
-      }
-    }
   }
   
   deinit {
