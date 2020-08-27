@@ -28,6 +28,7 @@ class TimerNotifications: CustomStringConvertible, NotificationScheduler {
     var components = DateComponents()
     let calendar = Calendar.current
     
+    components.nanosecond = calendar.component(.nanosecond, from: date)
     components.second = calendar.component(.second, from: date)
     components.minute = calendar.component(.minute, from: date)
     components.hour = calendar.component(.hour, from: date)

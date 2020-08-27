@@ -26,6 +26,7 @@ class ViewModel : ObservableObject{
   
   //MARK: - Initializer
   init() {
+    SystemSounds.loadSoundEffects()
     UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
         if success {
             print("All set!")
@@ -42,12 +43,13 @@ class ViewModel : ObservableObject{
     if allowToStart {
       memoryLapTime = setTime
       memoryLoops = loops
-      SystemSounds.loadSoundEffects()
       self.currentTimePublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
       print(self.notificationTimes.description)
-      self.notificationTimes.createNotification(at: Date().addingTimeInterval(1.0), title: "Start", soundName: .start)
       self.cancellable = currentTimePublisher?.sink { value in
-        counter += 1
+        print(Calendar.current.component(.nanosecond, from: value))
+        if counter == 0 {
+          self.createLocalNotifications(date: value)
+        }
         if counter >= 5 {
           self.countDownByOne()
           if self.setTime.isZero || (self.loops == 1 && self.setTime.exercise.minutes + self.setTime.exercise.seconds == 0)  {
@@ -60,6 +62,7 @@ class ViewModel : ObservableObject{
             completion?()
           }
         }
+        counter += 1
       }
     }
   }
@@ -97,32 +100,32 @@ class ViewModel : ObservableObject{
     }
   }
   
-  private func createLocalNotifications() {
+  private func createLocalNotifications(date: Date) {
     var isFirstLoop = false
     
     //Create immediate push notification
-//    self.notificationTimes.startTime = Date()
+    self.notificationTimes.startTime = date.addingTimeInterval(1)
     
     //Create end notification
-    let startEndExerciseAfter = 4 + (setTime.totalSeconds * Int(self.loops)) - (setTime.rest.minutes * 60 + setTime.rest.seconds)
-    self.notificationTimes.endTime = Date().addingTimeInterval(Double(startEndExerciseAfter))
+    let startEndExerciseAfter = 3 + (setTime.totalSeconds * Int(self.loops)) - (setTime.rest.minutes * 60 + setTime.rest.seconds)
+    self.notificationTimes.endTime = self.notificationTimes.startTime.addingTimeInterval(Double(startEndExerciseAfter))
     
     var startRestAfter = 0
     for _ in 0..<Int(self.loops) {
       //Create all start-rest notifications
       if !isFirstLoop {
-        startRestAfter = 4 + (setTime.exercise.minutes * 60 + setTime.exercise.seconds)
+        startRestAfter = 3 + (setTime.exercise.minutes * 60 + setTime.exercise.seconds)
         isFirstLoop = true
       } else {
         startRestAfter += setTime.totalSeconds
       }
-      self.notificationTimes.restTimes.append(Date().addingTimeInterval(Double(startRestAfter)))
+      self.notificationTimes.restTimes.append(self.notificationTimes.startTime.addingTimeInterval(Double(startRestAfter)))
       //Create all end-rest notifications
-      let startEndRestAfter = startRestAfter + setTime.rest.minutes * 60 + setTime.rest.seconds
-      self.notificationTimes.endOfRestTimes.append(Date().addingTimeInterval(Double(startEndRestAfter)))
+//      let startEndRestAfter = startRestAfter + setTime.rest.minutes * 60 + setTime.rest.seconds
+//      self.notificationTimes.endOfRestTimes.append(self.notificationTimes.startTime.addingTimeInterval(Double(startEndRestAfter)))
     }
-    if self.notificationTimes.endOfRestTimes.count > 0 {
-      self.notificationTimes.endOfRestTimes.removeLast()
+    if self.notificationTimes.restTimes.count > 0 {
+      self.notificationTimes.restTimes.removeLast()
     }
     
     self.notificationTimes.createNotifications()
