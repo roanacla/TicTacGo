@@ -44,9 +44,7 @@ class ViewModel : ObservableObject{
       memoryLapTime = setTime
       memoryLoops = loops
       self.currentTimePublisher = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-      print(self.notificationTimes.description)
       self.cancellable = currentTimePublisher?.sink { value in
-        print(Calendar.current.component(.nanosecond, from: value))
         if counter == 0 {
           self.createLocalNotifications(date: value)
         }
@@ -111,7 +109,7 @@ class ViewModel : ObservableObject{
     self.notificationTimes.endTime = self.notificationTimes.startTime.addingTimeInterval(Double(startEndExerciseAfter))
     
     var startRestAfter = 0
-    for _ in 0..<Int(self.loops) {
+    for _ in 1..<Int(self.loops) {
       //Create all start-rest notifications
       if !isFirstLoop {
         startRestAfter = 3 + (setTime.exercise.minutes * 60 + setTime.exercise.seconds)
@@ -121,17 +119,17 @@ class ViewModel : ObservableObject{
       }
       self.notificationTimes.restTimes.append(self.notificationTimes.startTime.addingTimeInterval(Double(startRestAfter)))
       //Create all end-rest notifications
-//      let startEndRestAfter = startRestAfter + setTime.rest.minutes * 60 + setTime.rest.seconds
-//      self.notificationTimes.endOfRestTimes.append(self.notificationTimes.startTime.addingTimeInterval(Double(startEndRestAfter)))
+      let startEndRestAfter = startRestAfter + setTime.rest.minutes * 60 + setTime.rest.seconds - 4
+      self.notificationTimes.endOfRestTimes.append(self.notificationTimes.startTime.addingTimeInterval(Double(startEndRestAfter)))
     }
-    if self.notificationTimes.restTimes.count > 0 {
-      self.notificationTimes.restTimes.removeLast()
-    }
-    
     self.notificationTimes.createNotifications()
   }
   
   deinit {
       self.cancellable?.cancel()
   }
+}
+
+extension TimerNotifications {
+  
 }

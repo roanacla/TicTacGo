@@ -44,13 +44,13 @@ class TimerNotifications: CustomStringConvertible, NotificationScheduler {
   
   func createNotifications() {
     createNotification(at: startTime, title: "Start", soundName: .start)
-    createNotification(at: endTime, title: "End of workout", soundName: .end)
+    createNotification(at: endTime, title: "End", soundName: .end)
     for startRest in restTimes {
-      createNotification(at: startRest, title: "Time to rest", soundName: .rest)
+      createNotification(at: startRest, title: "Rest Time", soundName: .rest)
     }
     
     for endRest in endOfRestTimes {
-      createNotification(at: endRest, title: "Time to start again", soundName: .start)
+      createNotification(at: endRest, title: "End of rest time", soundName: .start)
     }
   }
   
